@@ -755,11 +755,15 @@ WebSocketResponse
       :param aiohttp.web.Request request: HTTP request object, that the
                                           response answers.
 
-      :return: ``(ok, protocol)`` pair, *ok* is ``True`` on success,
-               *protocol* is websocket subprotocol which is passed by
-               client and accepted by server (one of *protocols*
-               sequence from :class:`WebSocketResponse` ctor). *protocol* may be
-               ``None`` if client and server subprotocols are nit overlapping.
+      :return: :class:`WebSocketReady` instance.
+
+               :attr:`WebSocketReady.ok` is
+               ``True`` on success, :attr:`WebSocketReady.protocol` is
+               websocket subprotocol which is passed by client and
+               accepted by server (one of *protocols* sequence from
+               :class:`WebSocketResponse` ctor).
+               :attr:`WebSocketReady.protocol` may be ``None`` if
+               client and server subprotocols are not overlapping.
 
       .. note:: The method never raises exception.
 
@@ -945,6 +949,32 @@ WebSocketResponse
 
 
 .. seealso:: :ref:`WebSockets handling<aiohttp-web-websockets>`
+
+
+WebSocketReady
+^^^^^^^^^^^^^^
+
+.. class:: WebSocketReady
+
+   A named tuple for returning result from
+   :meth:`WebSocketResponse.can_prepare`.
+
+   Has :class:`bool` check implemented, e.g.::
+
+       if not await ws.can_prepare(...):
+           cannot_start_websocket()
+
+   .. attribute:: ok
+
+      ``True`` if websocket connection can be established, ``False``
+      otherwise.
+
+
+   .. attribute:: protocol
+
+      :class:`str` represented selected websocket sub-protocol.
+
+   .. seealso:: :meth:`WebSocketResponse.can_prepare`
 
 
 json_response
